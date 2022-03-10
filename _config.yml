@@ -1,0 +1,47 @@
+# Basic
+title: Jason Darkness
+subtitle: A MUG-Dog a.k.a. "LIT.DARK"
+description: MUGs are MY LIFE.
+creator: <a href="https://LITDARK.cn">@LIT.DARK</a>
+
+url: "https://litdark.cn"
+
+permalink: /:year/:month/:title/
+
+# Format
+highlighter: rouge
+
+# supported colors: blue, green, purple, red, orange or slate. If you need clear, leave it empty.
+cover_color: red
+
+blog_button:
+    title: 博客
+    description: 访问博客
+
+nav:
+    - {title: 哔哩哔哩(Bilibili), description: All my works, url: 'https://space.bilibili.com/1529024'}
+    - {title: 捐赠(Donation), description: Make a Donation, url: '/donation'}
+    - {title: 关于我(About Me), description: 我到底是谁, url: '/about'}
+    - {title: BPC, description: B*****Patcher, url: '/BPC'}
+    # - {title: Another Button, description: A button, url: 'http://example.com'}
+
+# Pagination
+plugins: [jekyll-paginate]
+paginate: 10
+paginate_path: "page/:num/"
+
+# Comment
+comment:
+    # disqus:
+    # duoshuo:
+# Social
+social:
+    weibo: LIT_D_CN
+    github: LITDARK
+    twitter: LIT_D_CN
+    mail: JasonDarkness_CN@outlook.com
+
+# Google Analytics
+ga:
+    # id: your_ga_id
+    # host: your_host
