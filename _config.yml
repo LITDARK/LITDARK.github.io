@@ -1,7 +1,7 @@
 # Basic
 title: Jason Darkness
-subtitle: A MUG-Dog a.k.a. "LIT.DARK"
-description: MUGs are MY LIFE.
+subtitle: A MUG Player a.k.a. "LIT.DARK"
+description: K E E P   T R A I N I N G
 creator: <a href="https://LITDARK.cn">@LIT.DARK</a>
 
 url: "https://litdark.cn"
@@ -12,7 +12,7 @@ permalink: /:year/:month/:title/
 highlighter: rouge
 
 # supported colors: blue, green, purple, red, orange or slate. If you need clear, leave it empty.
-cover_color: red
+cover_color: blue
 
 blog_button:
     title: 博客
@@ -22,7 +22,6 @@ nav:
     - {title: 哔哩哔哩(Bilibili), description: All my works, url: 'https://space.bilibili.com/1529024'}
     - {title: 捐赠(Donation), description: Make a Donation, url: '/donation'}
     - {title: 关于我(About Me), description: 我到底是谁, url: '/about'}
-    - {title: BPC, description: B*****Patcher, url: '/BPC'}
     # - {title: Another Button, description: A button, url: 'http://example.com'}
 
 # Pagination
