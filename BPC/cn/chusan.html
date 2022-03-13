@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8">
+        <title>CHUNITHM NEW!! Modder</title>
+        <link rel="stylesheet" href="../css/style.css">
+        <link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+        <link href="../../assets/images/favicon.png" rel="shortcut icon" type="image/png">
+        <!-- don't hate -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script type="text/javascript" src="../js/FileSaver.min.js"></script>
+        <script type="text/javascript" src="../js/dllpatcher-cn.js"></script>
+        <script type="text/javascript">
+            window.addEventListener("load", function () {
+                new Patcher("chusanApp.exe", "", [   //mirrored from elpis.fun/gamepatcher   thanks@Elpis#0420
+                    {
+                        name: "关闭夜间闭店设置",
+                        tooltip: "关闭凌晨12点至次日早8点的强制闭店，但无法跳过日本时间早6:30至7点的维护时间",
+                        patches: [
+                            {offset: 0xB6B4F3, off: [0x74], on: [0xEB]},
+                        ],
+                    },
+                    {
+                        name: "启用共享音频，音频采样率必须为48000Hz",
+                        tooltip: "改善兼容性但可能增加延迟",
+                        patches: [
+                            {offset: 0xE78E3A, off: [0x01], on: [0x00]},
+                        ],
+                    },
+                    {
+                        name: "强制使用双声道输出",
+                        patches: [
+                            {offset: 0xE78F11, off: [0x75, 0x3F], on: [0x90, 0x90]},
+                        ],
+                    },
+                    {
+                        name: "最好别勾",
+                        tooltip: "这个选项就是“关闭选歌倒计时”，已经确认无法对刷卡游玩生效",
+                        patches: [
+                            {offset: 0x977AE7, off: [0x74], on: [0xEB]},
+                        ],
+                    },
+                    {
+                        name: "设置所有倒计时为999",
+                        patches: [
+                            {offset: 0x804C60, off: [0x8B, 0x44, 0x24, 0x04, 0x69, 0xC0, 0xE8, 0x03, 0x00, 0x00], on: [0xB8, 0x58, 0x3E, 0x0F, 0x00, 0x90, 0x90, 0x90, 0x90, 0x90]},
+                        ],
+                    },
+                    {
+                        name: "Title Server不加密(No Encryption)",
+                        tooltip: "勾选这个就别再选下面那个了",
+                        patches: [
+                            {offset: 0x544D7C, off: [0x39], on: [0xC3]},
+                        ]
+                    },
+					{
+                        name: "CVT筐体模式",
+                        tooltip: "测试",
+                        patches: [
+                            {offset: 0x1D864, off: [0x01], on: [0x00]},
+                            {offset: 0x1D89B, off: [0x01], on: [0x00]},
+                            {offset: 0x37BE4B, off: [0x75], on: [0xEB]},
+                            {offset: 0x37D95E, off: [0x84, 0xC0, 0x0F, 0x94, 0xC1], on: [0x90, 0x90, 0x90, 0x90, 0x90]},
+                            {offset: 0xE5C217, off: [0x80], on: [0x00]},
+                            {offset: 0x1CDE628, off: [0xC8], on: [0x00]},
+                            {offset: 0x1CDE62C, off: [0xC8], on: [0x00]},
+                        ],
+                    },
+                ]);
+            });
+        </script>
+    </head>
+    <body>
+        <h1>CHUNITHM NEW!! Modder</h1>
+    </body>
+</html>

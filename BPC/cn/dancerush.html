@@ -1,6 +1,59 @@
-<html>
+<!DOCTYPE html>
+<html lang="zh">
 <head>
-<meta http-equiv="refresh" content="1;url=https://www.youtube.com/watch?v=dQw4w9WgXcQ">
-<title>DANCERUSH STARDOM DLL Modder</title>
+    <meta charset="utf-8">
+    <title>DANCERUSH STARDOM DLL Modder</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+    <link href="../../assets/images/favicon.png" rel="shortcut icon" type="image/png">
+    <!-- don't hate -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script type="text/javascript" src="../js/FileSaver.min.js"></script>
+    <script type="text/javascript" src="../js/dllpatcher-cn.js"></script>
+    <script type="text/javascript">
+        window.addEventListener("load", function () {
+            new PatchContainer([
+                new Patcher("superstep.dll", "2018-10-16", [   //mirrored from elpis.fun/gamepatcher   thanks@Elpis#0420
+                    {
+                        name: "解锁全曲",
+                        patches: [
+                            //e-amusement
+                            {offset: 0x86CD8, off: [0x32, 0xC0], on: [0xB0, 0x01]},
+                            //event mode
+                            {offset: 0x7DEFE, off: [0x75], on: [0xEB]},
+                            //ACES FOR ACES, ENDYMION
+                            {offset: 0x7DF3E, off: [0x32, 0xC0], on: [0xB0, 0x01]},
+                        ]
+                    },
+                    {
+                        name: "跳过教程",
+                        patches: [{offset: 0x41844, off: [0x74], on: [0xEB]}]
+                    },
+                    {
+                        name: "冻结时间",
+                        patches: [{offset: 0x23127, off: [0x74], on: [0xEB]}]
+                    },
+                    {
+                        name: "解锁e-Amusement独占设置选项",
+                        patches: [{offset: 0x73E52, off: [0x75], on: [0xEB]}]
+                    },
+                    {
+                        name: "禁止代币(Credit)消耗",
+                        tooltip: "类似于FREE PLAY，允许使用Premium模式。需要投1个币(Credit)",
+                        patches: [
+                            {offset: 0x8B8A, off: [0x74, 0x0B], on: [0xEB, 0x09]},
+                            {offset: 0x8BEC, off: [0x74, 0x0B], on: [0xEB, 0x09]},
+                            {offset: 0x8C4C, off: [0x74, 0x0B], on: [0xEB, 0x09]},
+                            {offset: 0x8BC9, off: [0x74, 0x2E], on: [0xEB, 0x2C]},
+                            {offset: 0x8C29, off: [0x74, 0x2E], on: [0xEB, 0x2C]},
+                        ]
+                    },
+                ]),
+            ]);
+        });
+    </script>
 </head>
 <body>
+    <h1>DANCERUSH STARDOM DLL Modder</h1>
+</body>
+</html>
