@@ -1,10 +1,12 @@
 # BemaniPatcher-Custom
 
-A Custom version of BEMANIPatcher. Added support for "SOME" game releases.
+A Custom version of BemaniPatcher, including support for some n-0 games.
 
 Live version hosted on [my blog](https://LITDARK.cn/BPC/).
 
-Edited by LITDARK. Original README file below.
+All patches are either community created or mirrored from internet. See the source code of each game patcher for details.
+
+Color and language edited by LITDARK. Original README file below.
 
 >## BemaniPatcher
 >A tool to easily apply known hex edits to any binary, with examples for Bemani games.
