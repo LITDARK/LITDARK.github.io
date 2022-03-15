@@ -2,7 +2,7 @@
 
 A Custom version of BemaniPatcher, including support for some n-0 games.
 
-Live version hosted on [my blog](https://LITDARK.cn/BPC/).
+Live version hosted on [my blog](https://LITDARK.xyz/BPC/).
 
 All patches are either community created or mirrored from internet. See the source code of each game patcher for details.
 
