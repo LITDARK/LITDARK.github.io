@@ -34,10 +34,9 @@
                         ],
                     },
                     {
-                        name: "最好别勾",
-                        tooltip: "这个选项就是“关闭选歌倒计时”，已经确认无法对刷卡游玩生效",
+                        name: "关闭选歌倒计时",
                         patches: [
-                            {offset: 0x977AE7, off: [0x74], on: [0xEB]},
+                            {offset: 0x96D4AB, off: [0x74], on: [0xEB]},
                         ],
                     },
                     {
@@ -47,23 +46,29 @@
                         ],
                     },
                     {
-                        name: "Title Server不加密(No Encryption)",
-                        tooltip: "勾选这个就别再选下面那个了",
+                        name: "修复点对点游玩",
+                        tooltip: "修复点对点游玩时的无限同步",
                         patches: [
-                            {offset: 0x544D7C, off: [0x39], on: [0xC3]},
+                            {offset: 0x5F9093, off: [0x01], on: [0x00]},
+                        ]
+                    },
+                    {
+                        name: "Title Server不加密(No Encryption)",
+                        tooltip: "用于过网络自检",
+                        patches: [
+                            {offset: 0x1CDE628, off: [0xC8], on: [0x00]},
+                            {offset: 0x1CDE62C, off: [0xC8], on: [0x00]},
                         ]
                     },
 					{
                         name: "CVT筐体模式",
-                        tooltip: "测试",
+                        tooltip: "选择此项以使用60帧模式游玩",
                         patches: [
                             {offset: 0x1D864, off: [0x01], on: [0x00]},
                             {offset: 0x1D89B, off: [0x01], on: [0x00]},
                             {offset: 0x37BE4B, off: [0x75], on: [0xEB]},
                             {offset: 0x37D95E, off: [0x84, 0xC0, 0x0F, 0x94, 0xC1], on: [0x90, 0x90, 0x90, 0x90, 0x90]},
                             {offset: 0xE5C217, off: [0x80], on: [0x00]},
-                            {offset: 0x1CDE628, off: [0xC8], on: [0x00]},
-                            {offset: 0x1CDE62C, off: [0xC8], on: [0x00]},
                         ],
                     },
                 ]);

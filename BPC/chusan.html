@@ -34,10 +34,9 @@
                         ],
                     },
                     {
-                        name: "Uncheck is recommended",
-                        tooltip: "It was 'Disable Song Select Timer', but it was confirmed that it did not work when playing with card.",
+                        name: "Disable Song Select Timer",
                         patches: [
-                            {offset: 0x977AE7, off: [0x74], on: [0xEB]},
+                            {offset: 0x96D4AB, off: [0x74], on: [0xEB]},
                         ],
                     },
                     {
@@ -47,23 +46,29 @@
                         ],
                     },
                     {
-                        name: "No Encryption",
-                        tooltip: "Rather, you should not check in CVT mode.",
+                        name: "Patch for head-to-head play",
+                        tooltip: "Fix infinite sync while trying to connect to head to head play.",
                         patches: [
-                            {offset: 0x544D7C, off: [0x39], on: [0xC3]},
+                            {offset: 0x5F9093, off: [0x01], on: [0x00]},
                         ]
                     },
-					{
+                    {
+                        name: "No Encryption",
+                        tooltip: "Title server workaround",
+                        patches: [
+                            {offset: 0x1CDE628, off: [0xC8], on: [0x00]},
+                            {offset: 0x1CDE62C, off: [0xC8], on: [0x00]},
+                        ]
+                    },
+                    {
                         name: "CVT Mode",
-                        tooltip: "TEST",
+                        tooltip: "Check to use 60Hz",
                         patches: [
                             {offset: 0x1D864, off: [0x01], on: [0x00]},
                             {offset: 0x1D89B, off: [0x01], on: [0x00]},
                             {offset: 0x37BE4B, off: [0x75], on: [0xEB]},
                             {offset: 0x37D95E, off: [0x84, 0xC0, 0x0F, 0x94, 0xC1], on: [0x90, 0x90, 0x90, 0x90, 0x90]},
                             {offset: 0xE5C217, off: [0x80], on: [0x00]},
-                            {offset: 0x1CDE628, off: [0xC8], on: [0x00]},
-                            {offset: 0x1CDE62C, off: [0xC8], on: [0x00]},
                         ],
                     },
                 ]);
