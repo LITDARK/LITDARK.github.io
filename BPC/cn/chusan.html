@@ -12,65 +12,127 @@
         <script type="text/javascript" src="../js/dllpatcher-cn.js"></script>
         <script type="text/javascript">
             window.addEventListener("load", function () {
-                new Patcher("chusanApp.exe", "", [   //mirrored from elpis.fun/gamepatcher   thanks@Elpis#0420
-                    {
-                        name: "关闭夜间闭店设置",
-                        tooltip: "关闭凌晨12点至次日早8点的强制闭店，但无法跳过日本时间早6:30至7点的维护时间",
-                        patches: [
-                            {offset: 0xB6B4F3, off: [0x74], on: [0xEB]},
-                        ],
-                    },
-                    {
-                        name: "启用共享音频，音频采样率必须为48000Hz",
-                        tooltip: "改善兼容性但可能增加延迟",
-                        patches: [
-                            {offset: 0xE78E3A, off: [0x01], on: [0x00]},
-                        ],
-                    },
-                    {
-                        name: "强制使用双声道输出",
-                        patches: [
-                            {offset: 0xE78F11, off: [0x75, 0x3F], on: [0x90, 0x90]},
-                        ],
-                    },
-                    {
-                        name: "关闭选歌倒计时",
-                        patches: [
-                            {offset: 0x96D4AB, off: [0x74], on: [0xEB]},
-                        ],
-                    },
-                    {
-                        name: "设置所有倒计时为999",
-                        patches: [
-                            {offset: 0x804C60, off: [0x8B, 0x44, 0x24, 0x04, 0x69, 0xC0, 0xE8, 0x03, 0x00, 0x00], on: [0xB8, 0x58, 0x3E, 0x0F, 0x00, 0x90, 0x90, 0x90, 0x90, 0x90]},
-                        ],
-                    },
-                    {
-                        name: "修复点对点游玩",
-                        tooltip: "修复点对点游玩时的无限同步",
-                        patches: [
-                            {offset: 0x5F9093, off: [0x01], on: [0x00]},
-                        ]
-                    },
-                    {
-                        name: "Title Server不加密(No Encryption)",
-                        tooltip: "用于过网络自检",
-                        patches: [
-                            {offset: 0x1CDE628, off: [0xC8], on: [0x00]},
-                            {offset: 0x1CDE62C, off: [0xC8], on: [0x00]},
-                        ]
-                    },
-					{
-                        name: "CVT筐体模式",
-                        tooltip: "选择此项以使用60帧模式游玩",
-                        patches: [
-                            {offset: 0x1D864, off: [0x01], on: [0x00]},
-                            {offset: 0x1D89B, off: [0x01], on: [0x00]},
-                            {offset: 0x37BE4B, off: [0x75], on: [0xEB]},
-                            {offset: 0x37D95E, off: [0x84, 0xC0, 0x0F, 0x94, 0xC1], on: [0x90, 0x90, 0x90, 0x90, 0x90]},
-                            {offset: 0xE5C217, off: [0x80], on: [0x00]},
-                        ],
-                    },
+                new PatchContainer([
+                    new Patcher("chusanApp.exe", "(2.00.00) NEW!!", [   //mirrored from elpis.fun/gamepatcher   thanks@Elpis#0420
+                        {
+                            name: "关闭夜间闭店设置",
+                            tooltip: "关闭凌晨12点至次日早8点的强制闭店，但无法跳过日本时间早6:30至7点的维护时间",
+                            patches: [
+                                {offset: 0xB6B4F3, off: [0x74], on: [0xEB]},
+                            ],
+                        },
+                        {
+                            name: "启用共享音频，音频采样率必须为48000Hz",
+                            tooltip: "改善兼容性但可能增加延迟",
+                            patches: [
+                                {offset: 0xE78E3A, off: [0x01], on: [0x00]},
+                            ],
+                        },
+                        {
+                            name: "强制使用双声道输出",
+                            patches: [
+                                {offset: 0xE78F11, off: [0x75, 0x3F], on: [0x90, 0x90]},
+                            ],
+                        },
+                        {
+                            name: "关闭选歌倒计时",
+                            patches: [
+                                {offset: 0x96D4AB, off: [0x74], on: [0xEB]},
+                            ],
+                        },
+                        {
+                            name: "设置所有倒计时为999",
+                            patches: [
+                                {offset: 0x804C60, off: [0x8B, 0x44, 0x24, 0x04, 0x69, 0xC0, 0xE8, 0x03, 0x00, 0x00], on: [0xB8, 0x58, 0x3E, 0x0F, 0x00, 0x90, 0x90, 0x90, 0x90, 0x90]},
+                            ],
+                        },
+                        {
+                            name: "修复点对点游玩",
+                            tooltip: "修复点对点游玩时的无限同步",
+                            patches: [
+                                {offset: 0x5F9093, off: [0x01], on: [0x00]},
+                            ]
+                        },
+                        {
+                            name: "Title Server不加密(No Encryption)",
+                            tooltip: "用于过网络自检",
+                            patches: [
+                                {offset: 0x1CDE628, off: [0xC8], on: [0x00]},
+                                {offset: 0x1CDE62C, off: [0xC8], on: [0x00]},
+                            ]
+                        },
+	    				{
+                            name: "CVT筐体模式",
+                            tooltip: "选择此项以使用60帧模式游玩",
+                            patches: [
+                                {offset: 0x1D864, off: [0x01], on: [0x00]},
+                                {offset: 0x1D89B, off: [0x01], on: [0x00]},
+                                {offset: 0x37BE4B, off: [0x75], on: [0xEB]},
+                                {offset: 0x37D95E, off: [0x84, 0xC0, 0x0F, 0x94, 0xC1], on: [0x90, 0x90, 0x90, 0x90, 0x90]},
+                                {offset: 0xE5C217, off: [0x80], on: [0x00]},
+                            ],
+                        },
+                    ]),
+                    new Patcher("chusanApp.exe", "(2.05.00) NEW PLUS!!", [   //thanks @TPG#7803
+                        {
+                            name: "关闭夜间闭店设置",
+                            tooltip: "关闭凌晨12点至次日早8点的强制闭店，但无法跳过日本时间早6:30至7点的维护时间",
+                            patches: [
+                                {offset: 0xB81943, off: [0x74], on: [0xEB]},
+                            ],
+                        },
+                        {
+                            name: "启用共享音频，音频采样率必须为48000Hz",
+                            tooltip: "改善兼容性但可能增加延迟",
+                            patches: [
+                                {offset: 0xE95D2A, off: [0x01], on: [0x00]},
+                            ],
+                        },
+                        {
+                            name: "强制使用双声道输出",
+                            patches: [
+                                {offset: 0xE95E01, off: [0x75, 0x3F], on: [0x90, 0x90]},
+                            ],
+                        },
+                        {
+                            name: "关闭选歌倒计时",
+                            patches: [
+                                {offset: 0x98455B, off: [0x74], on: [0xEB]},
+                            ],
+                        },
+                        {
+                            name: "设置所有倒计时为999",
+                            patches: [
+                                {offset: 0x819940, off: [0x8B, 0x44, 0x24, 0x04, 0x69, 0xC0, 0xE8, 0x03, 0x00, 0x00], on: [0xB8, 0x58, 0x3E, 0x0F, 0x00, 0x90, 0x90, 0x90, 0x90, 0x90]},
+                            ],
+                        },
+                        {
+                            name: "修复点对点游玩",   //mirrored from elpis.fun/gamepatcher   thanks@Elpis#0420
+                            tooltip: "修复点对点游玩时的无限同步",
+                            patches: [
+                                {offset: 0x609FB3, off: [0x01], on: [0x00]},
+                            ]
+                        },
+                        {
+                            name: "Title Server不加密(No Encryption)",
+                            tooltip: "用于过网络自检",
+                            patches: [
+                                {offset: 0x1D10640, off: [0xCD], on: [0x00]},
+                                {offset: 0x1D10644, off: [0xCD], on: [0x00]},
+                            ]
+                        },
+		    			{
+                            name: "CVT筐体模式",
+                            tooltip: "选择此项以使用60帧模式游玩",
+                            patches: [
+                                {offset: 0x1D864, off: [0x01], on: [0x00]},
+                                {offset: 0x1D89B, off: [0x01], on: [0x00]},
+                                {offset: 0x37BBCB, off: [0x75], on: [0xEB]},
+                                {offset: 0x37D6DE, off: [0x84, 0xC0, 0x0F, 0x94, 0xC1], on: [0x90, 0x90, 0x90, 0x90, 0x90]},
+                                {offset: 0xE78E37, off: [0x80], on: [0x00]},
+                            ],
+                        },
+                    ])
                 ]);
             });
         </script>
