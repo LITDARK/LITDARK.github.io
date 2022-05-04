@@ -539,6 +539,124 @@
               ],
             },
           ]),
+          new Patcher("soundvoltex.dll", "2022-04-25", [   //mirrored from elpis.fun/gamepatcher   thanks@Elpis#0420
+			{
+              name: "禁止更改电源设置",
+              tooltip: "防止启动时更改电源设置",
+			  patches: [{ offset: 0x22D033, off: [0x75], on: [0xEB] }],
+			},
+			{
+              name: "禁止更改显示设置",
+              tooltip: "防止启动时更改显示设置",
+			  patches: [{ offset: 0x22D0CB, off: [0x75], on: [0xEB] }],
+			},
+			{
+              name: "强制BIO2 IO以Valkryie Model(女武神框)模式启动",
+              tooltip: "在ea3-config.xml中更改版本号KFC后第二个字母‘<spec __type=\"str\">F</spec>’为G或H后生效",
+			  patches: [{ offset: 0x449325, off: [0x87, 0x05], on: [0x47, 0x0C] }],
+			},
+			{
+              name: "启用120Hz支持",
+              tooltip: "将判定模式更改为120帧专用模式。若在60Hz屏幕上启用女武神框请不要勾选此设置！！！",
+			  patches: [{ offset: 0x76ADD6, off: [0x4E], on: [0x5E] }],
+			},
+			{
+			  type : "union",
+			  name : "音符(Note)帧率设置",
+			  offset : 0x40C8E2,
+			  patches : [
+			    {
+			      name : "默认",
+			      patch : [0xF2, 0x0F, 0x59, 0x35, 0xDE, 0xE7, 0x35, 0x00, 0x0F, 0x57, 0xC0, 0x66, 0x0F, 0x2E, 0xF0],
+			    },
+			    {
+			      name : "120 FPS",
+			      patch : [0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0xB8, 0x78, 0x00, 0x00, 0x00, 0xF2, 0x0F, 0x2A, 0xF0],
+			    },
+			    {
+			      name : "144 FPS",
+			      patch : [0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0xB8, 0x90, 0x00, 0x00, 0x00, 0xF2, 0x0F, 0x2A, 0xF0],
+			    },
+			    {
+			      name : "165 FPS",
+			      patch : [0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0xB8, 0xA5, 0x00, 0x00, 0x00, 0xF2, 0x0F, 0x2A, 0xF0],
+			    },
+			    {
+			      name : "240 FPS",
+			      patch : [0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0xB8, 0xF0, 0x00, 0x00, 0x00, 0xF2, 0x0F, 0x2A, 0xF0],
+			    },
+			    {
+			      name : "360 FPS",
+			      patch : [0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0xB8, 0x68, 0x01, 0x00, 0x00, 0xF2, 0x0F, 0x2A, 0xF0],
+			    },
+			  ]
+			},
+			{
+			  name: "强制设置音符(Note)帧率",
+			  tooltip: "若上方选项非默认，请启用此选项",
+			  patches: [
+			    { offset: 0x40C8F1, off: [0x74, 0x09], on: [0x90, 0x90] },
+			    { offset: 0x40C89B, off: [0x74, 0x5F], on: [0x90, 0x90] },
+			  ],
+			},
+			{
+              name: "启用共享模式WASAPI",
+              tooltip: "只更改当前默认音频设备。请更改音频设备格式为44100Hz 16bit。",
+			  patches: [{ offset: 0x4858D9, off: [0x04], on: [0x00] }],
+			},
+			{
+              name: "启用女武神框共享模式WASAPI",
+			  patches: [{ offset: 0x485837, off: [0x07], on: [0x00] }],
+			},
+			{
+              name: "允许使用非E004卡片",
+              tooltip: "允许使用非E004卡片(如Mifare卡片)",
+			  patches: [
+			    { offset: 0xA4B, off: [0x75, 0x12], on: [0x90, 0x90] },
+			    { offset: 0xA53, off: [0x74], on: [0xEB] },
+			  ],
+			},
+			{
+              name: "冻结时间",
+			  patches: [{ offset: 0x97986, off: [0x84], on: [0x85] }],
+			},
+			{
+              name: "冻结Premium Time时间",
+			  patches: [
+			    { offset: 0x3437E5, off: [0x0F, 0x85], on: [0x90, 0xE9] },
+			    { offset: 0x2C9B89, off: [0x0F, 0x84], on: [0x90, 0xE9] },
+			    { offset: 0x20BE1E, off: [0x75], on: [0xEB] },
+			  ],
+			},
+			{
+              name: "隐藏PT模式快捷键提示栏",
+              tooltip : "取而代之的是血条四周会有Blaster Pass的彩虹效果",
+			  patches: [{ offset: 0x253659, off: [0x8B, 0x08, 0x4B], on: [0xF3, 0x64, 0x46] }],
+			},
+			{
+			  type : "union",
+              name: "Premium Time时长",
+			  offset : 0x2EBA86,
+			  patches : [
+			    {
+                  name: "默认 (10分钟)",
+			      patch : [0x00, 0x70, 0xC9, 0xB2, 0x8B, 0x00, 0x00, 0x00],
+			    },
+			    {
+			      name : "20分钟",
+			      patch : [0x00, 0xE0, 0x92, 0x65, 0x17, 0x01, 0x00, 0x00],
+			    },
+			    {
+			      name : "30分钟",
+			      patch : [0x00, 0x50, 0x5C, 0x18, 0xA3, 0x01, 0x00, 0x00],
+			    },
+			    {
+			      name : "1小时",
+			      patch : [0x00, 0xA0, 0xB8, 0x30, 0x46, 0x03, 0x00, 0x00],
+                },
+              ],
+            },
+          ])
         ]);
       });
     </script>
