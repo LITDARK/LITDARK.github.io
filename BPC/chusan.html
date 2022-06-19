@@ -107,6 +107,21 @@
                             ],
                         },
                         {
+                            name: "Unlimit Maximum Tracks",   //mirrored from elpis.fun/gamepatcher   thanks@Elpis#0420
+                            tooltip: "You must check to play more than 7 tracks.",
+                            patches: [
+                                {offset: 0x6CBC89, off: [0xF0], on: [0xC0]},
+                            ],
+                        },
+                        {
+                            type : "number",
+                            name : "Max Tracks",   //mirrored from elpis.fun/gamepatcher   thanks@Elpis#0420
+                            offset : 0x398381,
+                            size : 4,
+                            min : 3,
+                            max : 12,
+                        },
+                        {
                             name: "Patch for head-to-head play",   //mirrored from elpis.fun/gamepatcher   thanks@Elpis#0420
                             tooltip: "Fix infinite sync while trying to connect to head to head play.",
                             patches: [

@@ -107,6 +107,21 @@
                             ],
                         },
                         {
+                            name: "解除单局游戏最大可游玩歌曲数限制",   //mirrored from elpis.fun/gamepatcher   thanks@Elpis#0420
+                            tooltip: "大于7首时必须启用此选项",
+                            patches: [
+                                {offset: 0x6CBC89, off: [0xF0], on: [0xC0]},
+                            ],
+                        },
+                        {
+                            type : "number",
+                            name : "最大可游玩歌曲数",   //mirrored from elpis.fun/gamepatcher   thanks@Elpis#0420
+                            offset : 0x398381,
+                            size : 4,
+                            min : 3,
+                            max : 12,
+                        },
+                        {
                             name: "修复点对点游玩",   //mirrored from elpis.fun/gamepatcher   thanks@Elpis#0420
                             tooltip: "修复点对点游玩时的无限同步",
                             patches: [
