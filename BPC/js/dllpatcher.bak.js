@@ -1,4 +1,3 @@
-/*jshint esversion: 6 */
 (function(window, document) {
 "use strict";
 
@@ -21,7 +20,7 @@ var replace = function(buffer, offset, bytes) {
     for(var i = 0; i < bytes.length; i++) {
         buffer[offset+i] = bytes[i];
     }
-};
+}
 
 var whichBytesMatch = function(buffer, offset, bytesArray) {
     for(var i = 0; i < bytesArray.length; i++) {
@@ -29,35 +28,7 @@ var whichBytesMatch = function(buffer, offset, bytesArray) {
             return i;
     }
     return -1;
-};
-
-// shorthand functions
-var createElementClass = function(elName, className, textContent, innerHTML) {
-    var el = document.createElement(elName);
-    el.className = className || '';
-    el.textContent = textContent || ''; // optional
-    // overrides textContent with HTML if provided
-    if(innerHTML) {
-        el.innerHTML = innerHTML;
-    }
-    return el;
-};
-
-var createInput = function(type, id, className) {
-    var el = document.createElement('input');
-    el.type = type;
-    el.id = id;
-    el.className = className || '';
-    return el;
-};
-
-var createLabel = function(labelText, htmlFor, className) {
-    var el = document.createElement('label');
-    el.textContent = labelText;
-    el.htmlFor = htmlFor;
-    el.className = className || '';
-    return el;
-};
+}
 
 // Each unique kind of patch should have createUI, validatePatch, applyPatch,
 // updateUI
@@ -72,14 +43,14 @@ class StandardPatch {
     createUI(parent) {
         var id = createID();
         var label = this.name;
-        var patch = createElementClass('div', 'patch');
-        this.checkbox = createInput('checkbox', id);
-        patch.appendChild(this.checkbox);
-        patch.appendChild(createLabel(label, id));
+        var patch = $('<div>', {'class' : 'patch'});
+        this.checkbox = $('<input type="checkbox" id="' + id + '">')[0];
+        patch.append(this.checkbox);
+        patch.append('<label for="' + id + '">' + label + '</label>');
         if(this.tooltip) {
-            patch.appendChild(createElementClass('div', 'tooltip', this.tooltip));
+            patch.append('<div class="tooltip">' + this.tooltip + '</div>');
         }
-        parent.appendChild(patch);
+        parent.append(patch);
     }
 
     updateUI(file) {
@@ -93,7 +64,7 @@ class StandardPatch {
         } else if(status === "off") {
             console.log('"' + this.name + '"', "is disabled!");
         } else {
-            return '"' + this.name + '" 选项无法正确读取！请确认是否选择了正确的文件！';
+            return '"' + this.name + '" is neither on nor off! Have you got the right file?';
         }
     }
 
@@ -116,16 +87,16 @@ class StandardPatch {
                 if(patchStatus === "") {
                     patchStatus = "off";
                 } else if(patchStatus != "off"){
-                    return "选项状态无法读取";
+                    return "on/off mismatch within patch";
                 }
             } else if(bytesMatch(file, patch.offset, patch.on)) {
                 if(patchStatus === "") {
                     patchStatus = "on";
                 } else if(patchStatus != "on"){
-                    return "选项状态无法读取";
+                    return "on/off mismatch within patch";
                 }
             } else {
-                return "选项状态未知！";
+                return "patch neither on nor off";
             }
         }
         return patchStatus;
@@ -144,14 +115,14 @@ class DynamicPatch {
     createUI(parent) {
         var id = createID();
         var label = this.name;
-        this.ui = createElementClass('div', 'patch');
-        this.checkbox = createInput('checkbox', id);
-        this.ui.appendChild(this.checkbox);
-        this.ui.appendChild(createLabel(label, id));
+        this.ui = $('<div>', {'class' : 'patch'});
+        this.checkbox = $('<input type="checkbox" id="' + id + '">')[0];
+        this.ui.append(this.checkbox);
+        this.ui.append('<label for="' + id + '">' + label + '</label>');
         if(this.tooltip) {
-            this.ui.appendChild(createElementClass('div', 'tooltip', this.tooltip));
+            this.ui.append('<div class="tooltip">' + this.tooltip + '</div>');
         }
-        parent.appendChild(this.ui);
+        parent.append(this.ui);
     }
 
     updateUI(file) {
@@ -170,7 +141,7 @@ class DynamicPatch {
         } else if(status === "off") {
             console.log('"' + this.name + '"', "is disabled!");
         } else {
-            return '"' + this.name + '" 选项无法正确读取！请确认是否选择了正确的文件！';
+            return '"' + this.name + '" is neither on nor off! Have you got the right file?';
         }
     }
 
@@ -179,28 +150,29 @@ class DynamicPatch {
     }
 
     replaceAll(file, featureOn) {
-        for(let patch of this.patches) {
-            if (Array.isArray(patch.offset)) {
-                for(const offset of patch.offset) {
-                    if (this.target === 'string') {
-                        replace(file, offset,
-                            new TextEncoder().encode(featureOn? patch.on : patch.off));
-                    } else {
-                        patch.on = patch.on.map((patch, idx) => patch === 'XX' ? file[offset + idx] : patch);
-                        patch.off = patch.off.map((patch, idx) => patch === 'XX' ? file[offset + idx] : patch);
-                        replace(file, offset,
-                            featureOn? patch.on : patch.off);
+        for(var i = 0; i < this.patches.length; i++) {
+            if (Array.isArray(this.patches[i].offset)) {
+                this.patches[i].offset.forEach((offset) => {
+                        if (this.target === 'string') {
+                            replace(file, offset,
+                                new TextEncoder().encode(featureOn? this.patches[i].on : this.patches[i].off));
+                        } else {
+                            this.patches[i].on = this.patches[i].on.map((patch, idx) => patch === 'XX' ? file[offset + idx] : patch);
+                            this.patches[i].off = this.patches[i].off.map((patch, idx) => patch === 'XX' ? file[offset + idx] : patch);
+                            replace(file, offset,
+                                featureOn? this.patches[i].on : this.patches[i].off)
+                        }
                     }
-                }
+                );
             } else {
                 if (this.target === 'string') {
-                    replace(file, patch.offset,
-                        new TextEncoder().encode(featureOn? patch.on : patch.off));
+                    replace(file, this.patches[i].offset,
+                        new TextEncoder().encode(featureOn? this.patches[i].on : this.patches[i].off));
                 } else {
-                    patch.on = patch.on.map((patch, idx) => patch === 'XX' ? file[patch.offset + idx] : patch);
-                    patch.off = patch.off.map((patch, idx) => patch === 'XX' ? file[patch.offset + idx] : patch);
-                    replace(file, patch.offset,
-                        featureOn? patch.on : patch.off);
+                    this.patches[i].on = this.patches[i].on.map((patch, idx) => patch === 'XX' ? file[this.patches[i].offset + idx] : patch);
+                    this.patches[i].off = this.patches[i].off.map((patch, idx) => patch === 'XX' ? file[this.patches[i].offset + idx] : patch);
+                    replace(file, this.patches[i].offset,
+                        featureOn? this.patches[i].on : this.patches[i].off);
                 }
             }
         }
@@ -208,10 +180,9 @@ class DynamicPatch {
 
     checkPatch(file, updateUiFlag = false) {
         var patchStatus = "";
-        let listUi;
         if (updateUiFlag) {
-            listUi = document.createElement('ul');
-            this.ui.appendChild(listUi);
+            var listUi = $('<ul />');
+            this.ui.append(listUi);
         }
         for(var i = 0; i < this.patches.length; i++) {
             var patch = this.patches[i];
@@ -221,9 +192,9 @@ class DynamicPatch {
             if(offOffset > 0) {
                 if (updateUiFlag) {
                     if (this.target === 'string') {
-                        listUi.appendChild(createElementClass('li', 'patch-off', null, '0x' + offOffset.toString(16) + ' <b>' + patch.off + '</b> will be replaced with <b>'+ patch.on +'</b>'));
+                        listUi.append('<li class="patch-off">0x' + offOffset.toString(16) + ' <b>' + patch.off + '</b> will be replaced with <b>'+ patch.on +'</b></li>');
                     } else {
-                        listUi.appendChild(createElementClass('li', 'patch-off', '0x' + offOffset.toString(16) + ' will be replaced'));
+                        listUi.append('<li class="patch-off">0x' + offOffset.toString(16) + ' will be replaced</li>');
                     }
                 }
                 if(patchStatus === "") {
@@ -232,9 +203,9 @@ class DynamicPatch {
             } else if(onOffset > 0) {
                 if (updateUiFlag) {
                     if (this.target === 'string') {
-                        listUi.appendChild(createElementClass('li', 'patch-on', null, '0x' + onOffset.toString(16) + ' <b>' + patch.on + '</b> will be replaced with <b>'+ patch.off +'</b>'));
+                        listUi.append('<li class="patch-on">0x' + onOffset.toString(16) + ' <b>' + patch.on + '</b> will be replaced with <b>'+ patch.off +'</b></li>');
                     } else {
-                        listUi.appendChild(createElementClass('li', 'patch-on', '0x' + onOffset.toString(16) + ' will be replaced'));
+                        listUi.append('<li class="patch-on">0x' + onOffset.toString(16) + ' will be replaced</li>');
                     }
                 }
                 if(patchStatus === "") {
@@ -251,30 +222,30 @@ class DynamicPatch {
 
     checkPatchAll(file, updateUiFlag = false) {
         var patchStatus = "";
-        let listUi;
         if (updateUiFlag) {
-            listUi = document.createElement('ul');
-            this.ui.appendChild(listUi);
+            var listUi = $('<ul />');
+            this.ui.append(listUi);
         }
-        for(let patch of this.patches) {
+        for(var i = 0; i < this.patches.length; i++) {
+            var patch = this.patches[i];
             var offOffset = this.searchPatchOffsetAll(file, patch.off);
             var onOffset = this.searchPatchOffsetAll(file, patch.on);
-            patch.offset = offOffset.length === 0 ? onOffset : offOffset;
-
+            this.patches[i].offset = offOffset.length === 0 ? onOffset : offOffset;
+            
             if(offOffset.length > 0) {
                 if (updateUiFlag) {
-                    for(const offset of offOffset) {
-                        listUi.appendChild(createElementClass('li', 'patch-off', '0x' + offset.toString(16) + ' will be replaced'));
-                    }
+                    offOffset.forEach((offset) => {
+                        listUi.append('<li class="patch-off">0x' + offset.toString(16) + ' will be replaced</li>');
+                    });
                 }
                 if(patchStatus === "") {
                     patchStatus = "off";
                 }
             } else if(onOffset.length > 0) {
                 if (updateUiFlag) {
-                    for(const offset of onOffset) {
-                        listUi.appendChild(createElementClass('li', 'patch-on', '0x' + offset.toString(16) + ' will be replaced'));
-                    }
+                    onOffset.forEach((offset) => {
+                        listUi.append('<li class="patch-on">0x' + offset.toString(16) + ' will be replaced</li>');
+                    });
                 }
                 if(patchStatus === "") {
                     patchStatus = "on";
@@ -285,15 +256,14 @@ class DynamicPatch {
         }
         return patchStatus;
     }
-
+    
     searchPatchOffset(file, search, offset) {
-        let searchBytes;
         if (this.target === 'string') {
-            searchBytes = new TextEncoder().encode(search);
+            var searchBytes = new TextEncoder().encode(search);
         } else {
-            searchBytes = search;
+            var searchBytes = search;
         }
-
+        
         Uint8Array.prototype.indexOfArr = function(searchElements, fromIndex) {
             fromIndex = fromIndex || 0;
 
@@ -304,7 +274,7 @@ class DynamicPatch {
                     index: -1,
                 };
             }
-
+        
             for(var i = index, j = 0; j < searchElements.length && i < this.length; i++, j++) {
                 if (this.target !== 'string' && searchElements[j] === 'XX') {
                     continue;
@@ -322,7 +292,7 @@ class DynamicPatch {
             };
         };
 
-        var idx = 0;
+        var idx = 0; 
         var foundCount = 0;
         for (var i = 0; i < file.length; i++) {
           var result = file.indexOfArr(searchBytes, idx);
@@ -340,16 +310,15 @@ class DynamicPatch {
     }
 
     searchPatchOffsetAll(file, search) {
-        let searchBytes;
         if (this.target === 'string') {
-            searchBytes = new TextEncoder().encode(search);
+            var searchBytes = new TextEncoder().encode(search);
         } else {
-            searchBytes = search;
+            var searchBytes = search;
         }
 
         Uint8Array.prototype.indexOfArr = function(searchElements, fromIndex) {
             fromIndex = fromIndex || 0;
-
+        
             var index = Array.prototype.indexOf.call(this, searchElements[0], fromIndex);
             if(searchElements.length === 1 || index === -1) {
                 return {
@@ -357,7 +326,7 @@ class DynamicPatch {
                     index: -1,
                 };
             }
-
+        
             for(var i = index, j = 0; j < searchElements.length && i < this.length; i++, j++) {
                 if (this.target !== 'string' && searchElements[j] === 'XX') {
                     continue;
@@ -369,14 +338,14 @@ class DynamicPatch {
                     };
                 }
             }
-
+        
             return {
                 match: true,
                 index,
             };
         };
 
-        var idx = 0;
+        var idx = 0; 
         var foundOffsetArray = [];
         for (var i = 0; i < file.length; i++) {
           var result = file.indexOfArr(searchBytes, idx);
@@ -407,30 +376,29 @@ class UnionPatch {
         this.radios = [];
         var radio_id = createID();
 
-        var container =  createElementClass('div', 'patch-union');
-        container.appendChild(createElementClass('span', 'patch-union-title', this.name + ':'));
+        var container = $("<div>", {"class": "patch-union"});
+        container.append('<span class="patch-union-title">' + this.name + ':');
         if(this.tooltip) {
-            container.appendChild(createElementClass('div', 'tooltip', this.tooltip));
+            container.append('<div class="tooltip">' + this.tooltip + '</div>');
         }
-        container.appendChild(document.createElement('span'));
+        container.append('</span>');
 
         for(var i = 0; i < this.patches.length; i++) {
             var patch = this.patches[i];
             var id = createID();
             var label = patch.name;
-            var patchDiv = createElementClass('div', 'patch');
-            var radio = createInput('radio', id);
-            radio.name = radio_id;
+            var patchDiv = $('<div>', {'class' : 'patch'});
+            var radio = $('<input type="radio" id="' + id + '" name="' + radio_id + '">')[0];
             this.radios.push(radio);
 
-            patchDiv.appendChild(radio);
-            patchDiv.appendChild(createLabel(label, id));
+            patchDiv.append(radio);
+            patchDiv.append('<label for="' + id + '">' + label + '</label>');
             if(patch.tooltip) {
-                patchDiv.appendChild(createElementClass('div', 'tooltip', patch.tooltip));
+                patchDiv.append('<div class="tooltip">' + patch.tooltip + '</div>');
             }
-            container.appendChild(patchDiv);
+            container.append(patchDiv);
         }
-        parent.appendChild(container);
+        parent.append(container);
     }
 
     updateUI(file) {
@@ -451,7 +419,7 @@ class UnionPatch {
                 return;
             }
         }
-        return '"' + this.name + '" 没有有效数值！请确认是否选择了正确的文件！';
+        return '"' + this.name + '" doesn\'t have a valid patch! Have you got the right file?';
     }
 
     applyPatch(file) {
@@ -485,25 +453,26 @@ class NumberPatch {
     createUI(parent) {
         var id = createID();
         var label = this.name;
-        var patch = createElementClass('div', 'patch');
+        var patch = $('<div>', {'class': 'patch'});
 
-        patch.appendChild(createLabel(label, id));
+        patch.append('<label for="' + id + '">' + label + ': </label>');
 
-        this.number = createInput('number', id);
+        var minmax = ' ';
         if (this.min !== null) {
-            this.number.min = this.min;
+            minmax += 'min="' + this.min + '" ';
         }
         if (this.max) {
-            this.number.max = this.max;
+            minmax += 'max="' + this.max + '" ';
         }
 
-        patch.appendChild(this.number);
+        this.number = $('<input type="number"' + minmax + 'id="' + id + '">')[0];
+        patch.append(this.number);
 
 
         if (this.tooltip) {
-            patch.appendChild(createElementClass('div', 'tooltip', this.tooltip));
+            patch.append('<div class="tooltip">' + this.tooltip + '</div>');
         }
-        parent.appendChild(patch);
+        parent.append(patch)
 
     }
 
@@ -546,12 +515,12 @@ class NumberPatch {
 var loadPatch = function(_this, self, patcher) {
     patcher.loadPatchUI();
     patcher.updatePatchUI();
-    patcher.container.style.display = '';
+    patcher.container.show();
     var successStr = patcher.filename;
-    if (typeof _this.description === "string") {
+    if ($.type(_this.description) === "string") {
         successStr += "(" + patcher.description + ")";
     }
-    self.successDiv.innerHTML = successStr + " 加载成功！";
+    self.successDiv.html(successStr + " loaded successfully!");
 };
 
 class PatchContainer {
@@ -573,85 +542,94 @@ class PatchContainer {
 
     createUI() {
         var self = this;
-        var container = createElementClass('div', 'patchContainer');
+        var container = $("<div>", {"class": "patchContainer"});
         var header = this.getSupportedDLLs().join(", ");
-        container.innerHTML = "<h3>" + header + "</h3>";
+        container.html("<h3>" + header + "</h3>");
 
-        var supportedDlls = document.createElement('ul');
+        var supportedDlls = $("<ul>");
         this.forceLoadTexts = [];
         this.forceLoadButtons = [];
         this.matchSuccessText = [];
         for (var i = 0; i < this.patchers.length; i++) {
             var checkboxId = createID();
 
-            var listItem = document.createElement('li');
-            listItem.appendChild(createLabel(this.patchers[i].description, checkboxId, 'patchPreviewLabel'));
-            var matchPercent = createElementClass('span', 'matchPercent');
+            var listItem = $("<li>");
+            $('<label>')
+                .attr("for", checkboxId)
+                .text(this.patchers[i].description)
+                .addClass('patchPreviewLabel')
+                .appendTo(listItem);
+            var matchPercent = $('<span>').addClass('matchPercent');
             this.forceLoadTexts.push(matchPercent);
-            listItem.appendChild(matchPercent);
-            var matchSuccess = createElementClass('span', 'matchSuccess');
+            matchPercent.appendTo(listItem);
+            var matchSuccess = $('<span>').addClass('matchSuccess');
             this.matchSuccessText.push(matchSuccess);
-            listItem.appendChild(matchSuccess);
-            var forceButton = createElementClass('button', '', '强制加载?');
-            forceButton.style.display = 'none';
+            matchSuccess.appendTo(listItem);
+            var forceButton = $('<button>').text('Force load?').hide();
             this.forceLoadButtons.push(forceButton);
-            listItem.appendChild(forceButton);
+            forceButton.appendTo(listItem);
 
-            var input = createInput('checkbox', checkboxId, 'patchPreviewToggle');
-            listItem.appendChild(input);
-            var patchPreviews = createElementClass('ul', 'patchPreview');
+            $("<input>", {
+                "class": "patchPreviewToggle",
+                "id": checkboxId,
+                "type": "checkbox",
+            }).appendTo(listItem);
+            var patchPreviews = $("<ul>").addClass('patchPreview');
             for (var j = 0; j < this.patchers[i].mods.length; j++) {
                 var patchName = this.patchers[i].mods[j].name;
-                patchPreviews.appendChild(createElementClass('li', null, patchName));
+                $('<li>').text(patchName).appendTo(patchPreviews);
             }
-            listItem.appendChild(patchPreviews);
+            patchPreviews.appendTo(listItem);
 
-            supportedDlls.appendChild(listItem);
+            listItem.appendTo(supportedDlls);
         }
 
-        ["dragover", "dragenter"].forEach(function(n){
-            document.documentElement.addEventListener(n,function (e) {
-                container.classList.add("dragover");
+        $("html").on("dragover dragenter", function () {
+            container.addClass("dragover");
+            return true;
+        })
+            .on("dragleave dragend drop", function () {
+                container.removeClass("dragover");
+                return true;
+            })
+            .on("dragover dragenter dragleave dragend drop", function (e) {
                 e.preventDefault();
                 e.stopPropagation();
             });
-        });
-        ["dragleave", "dragend", "drop"].forEach(function(n){
-            document.documentElement.addEventListener(n,function (e) {
-                container.classList.remove("dragover");
-                e.preventDefault();
-                e.stopPropagation();
-            });
-        });
 
-        container.addEventListener("drop", function (e) {
-            var files = e.dataTransfer.files;
+        container.on("drop", function (e) {
+            var files = e.originalEvent.dataTransfer.files;
             if (files && files.length > 0)
                 self.loadFile(files[0]);
         });
 
         var filepickerId = createID();
-        this.fileInput = createInput('file', filepickerId, 'fileInput');
-        var label = createLabel('', filepickerId, 'fileLabel');
-        label.innerHTML = "<strong>选择文件</strong> 或直接拖拽至此窗口。";
+        this.fileInput = $("<input>",
+            {
+                "class": "fileInput",
+                "id": filepickerId,
+                "type": "file",
+            });
+        var label = $("<label>", {"class": "fileLabel", "for": filepickerId});
+        label.html("<strong>Choose a file</strong> or drag and drop.");
 
-        this.fileInput.addEventListener("change", function (e) {
+        this.fileInput.on("change", function (e) {
             if (this.files && this.files.length > 0)
                 self.loadFile(this.files[0]);
         });
 
-        this.successDiv = createElementClass('div', 'success');
-        this.errorDiv = createElementClass('div', 'error');
+        this.successDiv = $("<div>", {"class": "success"});
+        this.errorDiv = $("<div>", {"class": "error"});
 
-        container.appendChild(this.fileInput);
-        container.appendChild(label);
+        container.append(this.fileInput);
+        container.append(label);
 
-        container.appendChild(createElementClass('h4', null, '支持版本:'));
-        container.appendChild(createElementClass('h5', null, '点击版本号/版本名称以预览可用补丁选项'));
-        container.appendChild(supportedDlls);
-        container.appendChild(this.successDiv);
-        container.appendChild(this.errorDiv);
-        document.body.appendChild(container);
+        $("<h4>Supported Versions:</h4>").appendTo(container);
+        $("<h5>Click name to preview patches</h5>").appendTo(container);
+        container.append(supportedDlls);
+        container.append(this.successDiv);
+        container.append(this.errorDiv);
+        $("body").append(container);
     }
 
     loadFile(file) {
@@ -661,51 +639,52 @@ class PatchContainer {
         reader.onload = function (e) {
             var found = false;
             // clear logs
-            self.errorDiv.textContent = '';
-            self.successDiv.textContent = '';
+            self.errorDiv.empty();
+            self.successDiv.empty();
             for (var i = 0; i < self.patchers.length; i++) {
                 // reset text and buttons
-                self.forceLoadButtons[i].style.display = 'none';
-                self.forceLoadTexts[i].textContent = '';
-                self.matchSuccessText[i].textContent = '';
+                self.forceLoadButtons[i].hide();
+                self.forceLoadTexts[i].text('');
+                self.matchSuccessText[i].text('');
                 var patcher = self.patchers[i];
                 // remove the previous UI to clear the page
                 patcher.destroyUI();
                 // patcher UI elements have to exist to load the file
                 patcher.createUI();
-                patcher.container.style.display = 'none';
+                patcher.container.hide();
                 patcher.loadBuffer(e.target.result);
                 if (patcher.validatePatches()) {
                     found = true;
                     loadPatch(this, self, patcher);
                     // show patches matched for 100% - helps identify which version is loaded
                     var valid = patcher.validPatches;
-                    self.matchSuccessText[i].textContent = ' ' + valid + ' 个选项中的 ' + valid + ' 个选项匹配 (100%) ';
+                    self.matchSuccessText[i].text(' ' + valid + ' of ' + valid + ' patches matched (100%) ');
                 }
             }
 
             if (!found) {
                 // let the user force a match
-                for (let i = 0; i < self.patchers.length; i++) {
-                    const patcher = self.patchers[i];
+                for (var i = 0; i < self.patchers.length; i++) {
+                    var patcher = self.patchers[i];
 
-                    const valid = patcher.validPatches;
-                    const percent = (valid / patcher.totalPatches * 100).toFixed(1);
+                    var valid = patcher.validPatches;
+                    var percent = (valid / patcher.totalPatches * 100).toFixed(1);
 
-                    self.forceLoadTexts[i].textContent = ' 只有 ' + valid + ' 个选项与全部 ' + patcher.totalPatches + ' 个选项匹配 (' + percent + '%) ';
-                    self.forceLoadButtons[i].style.display = '';
-                    self.forceLoadButtons[i].onclick = function(i) {
+                    self.forceLoadTexts[i].text(' ' + valid + ' of ' + patcher.totalPatches + ' patches matched (' + percent + '%) ');
+                    self.forceLoadButtons[i].show();
+                    self.forceLoadButtons[i].off('click');
+                    self.forceLoadButtons[i].click(function(i) {
                         // reset old text
                         for(var j = 0; j < self.patchers.length; j++) {
-                            self.forceLoadButtons[j].style.display = 'none';
-                            self.forceLoadTexts[j].textContent = '';
+                            self.forceLoadButtons[j].hide();
+                            self.forceLoadTexts[j].text('');
                         }
 
 
                         loadPatch(this, self, self.patchers[i]);
-                    }.bind(this, i);
+                    }.bind(this, i));
                 }
-                self.errorDiv.innerHTML = "补丁选项并非完全匹配！";
+                self.errorDiv.html("No patch set was a 100% match.");
             }
         };
 
@@ -747,64 +726,63 @@ class Patcher {
 
     createUI() {
         var self = this;
-        this.container = createElementClass('div', 'patchContainer');
+        this.container = $("<div>", {"class": "patchContainer"});
         var header = this.filename;
         if(this.description === "string") {
             header += ' (' + this.description + ')';
         }
-        this.container.innerHTML = '<h3>' + header + '</h3>';
+        this.container.html('<h3>' + header + '</h3>');
 
-        this.successDiv = createElementClass('div', 'success');
-        this.errorDiv = createElementClass('div', 'error');
-        this.patchDiv = createElementClass('div', 'patches');
+        this.successDiv = $("<div>", {"class": "success"});
+        this.errorDiv = $("<div>", {"class": "error"});
+        this.patchDiv = $("<div>", {"class": "patches"});
 
-        var saveButton = document.createElement('button');
-        saveButton.disabled = true;
-        saveButton.textContent = '请先加载文件';
-        saveButton.addEventListener('click', this.saveDll.bind(this));
+        var saveButton = $("<button disabled>");
+        saveButton.text('Load file First');
+        saveButton.on('click', this.saveDll.bind(this));
         this.saveButton = saveButton;
 
         if (!this.multiPatcher) {
-            ["dragover", "dragenter"].forEach(function(n){
-                document.documentElement.addEventListener(n,function(e) {
-                    self.container.classList.add('dragover');
-                    e.preventDefault();
-                    return true;
-                });
-            });
-            ["dragleave", "dragend", "drop"].forEach(function(n){
-                document.documentElement.addEventListener(n,function(e) {
-                    self.container.classList.remove('dragover');
-                    e.preventDefault();
-                    return true;
-                });
+            $('html').on('dragover dragenter', function() {
+                self.container.addClass('dragover');
+                return true;
+            })
+            .on('dragleave dragend drop', function() {
+                self.container.removeClass('dragover');
+                return true;
+            })
+            .on('dragover dragenter dragleave dragend drop', function(e) {
+                e.preventDefault();
             });
 
-            this.container.addEventListener('drop', function(e) {
-                var files = e.dataTransfer.files;
+            this.container.on('drop', function(e) {
+                var files = e.originalEvent.dataTransfer.files;
                 if(files && files.length > 0)
                     self.loadFile(files[0]);
             });
 
             var filepickerId = createID();
-            this.fileInput = createInput('file', filepickerId, 'fileInput');
-            var label = createLabel('', filepickerId, 'fileLabel');
-            label.innerHTML = '<strong>选择文件</strong> 或直接拖拽至此窗口。';
+            this.fileInput = $("<input>",
+                {"class": "fileInput",
+                 "id" : filepickerId,
+                 "type" : 'file'});
+            var label = $("<label>", {"class": "fileLabel", "for": filepickerId});
+            label.html('<strong>Choose a file</strong> or drag and drop.');
 
-            this.fileInput.addEventListener('change', function(e) {
+            this.fileInput.on('change', function(e) {
                 if(this.files && this.files.length > 0)
                     self.loadFile(this.files[0]);
             });
 
-            this.container.appendChild(this.fileInput);
-            this.container.appendChild(label);
+            this.container.append(this.fileInput);
+            this.container.append(label);
         }
 
-        this.container.appendChild(this.successDiv);
-        this.container.appendChild(this.errorDiv);
-        this.container.appendChild(this.patchDiv);
-        this.container.appendChild(saveButton);
-        document.body.appendChild(this.container);
+        this.container.append(this.successDiv);
+        this.container.append(this.errorDiv);
+        this.container.append(this.patchDiv);
+        this.container.append(saveButton);
+        $("body").append(this.container);
     }
 
     destroyUI() {
@@ -815,15 +793,15 @@ class Patcher {
     loadBuffer(buffer) {
         this.dllFile = new Uint8Array(buffer);
         if(this.validatePatches()) {
-            this.successDiv.classList.remove("hidden");
-            this.successDiv.innerHTML = "文件加载成功！";
+            this.successDiv.removeClass("hidden");
+            this.successDiv.html("File loaded successfully!");
         } else {
-            this.successDiv.classList.add("hidden");
+            this.successDiv.addClass("hidden");
         }
         // Update save button regardless
-        this.saveButton.disabled = false;
-        this.saveButton.textContent = '保存文件';
-        this.errorDiv.innerHTML = this.errorLog;
+        this.saveButton.prop('disabled', false);
+        this.saveButton.text('Save Patched File');
+        this.errorDiv.html(this.errorLog);
     }
 
     loadFile(file) {
@@ -838,20 +816,6 @@ class Patcher {
         reader.readAsArrayBuffer(file);
     }
 
-    downloadURI(uri, filename) {
-        // http://stackoverflow.com/a/18197341
-        var element = document.createElement('a');
-        element.setAttribute('href', uri);
-        element.setAttribute('download', filename);
-
-        element.style.display = 'none';
-        document.body.appendChild(element);
-
-        element.click();
-
-        document.body.removeChild(element);
-    }
-
     saveDll() {
         if(!this.dllFile || !this.mods || !this.filename)
             return;
@@ -861,9 +825,7 @@ class Patcher {
         }
 
         var blob = new Blob([this.dllFile], {type: "application/octet-stream"});
-        var uri = URL.createObjectURL(blob);
-        this.downloadURI(uri, this.filename);
-        URL.revokeObjectURL(uri);
+        saveAs(blob, this.filename);
     }
 
     loadPatchUI() {
