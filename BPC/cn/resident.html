@@ -13,7 +13,7 @@
     <script type="text/javascript">
         window.addEventListener("load", function () {
             new PatchContainer([
-                new Patcher("bm2dx.dll", "2022-10-19", [
+                new Patcher("bm2dx.dll", "2022-10-19", [   //mirrored from elpis.fun/gamepatcher   thanks@Elpis#0420
                     {
                         name: "冻结菜单/标准模式时间",
                         patches: [{ offset: 0x8B3115, off: [0x0F, 0x84], on: [0x90, 0xE9] }],
@@ -171,12 +171,12 @@
                         ]
                     },
                     {
-                        name: "跳过显示器检测(Monitor Check)",
+                        name: "跳过屏幕检测(Monitor Check)",
                         patches: [{ offset: 0x84926C, off: [0x8C], on: [0x8D] }],
                     },
                     {
                         type : "union",
-                        name : "选择显示器检测回报值",
+                        name : "选择屏幕检测回报值",
                         offset : 0x8711C0,
                         patches : [
                             {
@@ -207,7 +207,7 @@
                     },
                     {
                         type : "number",
-                        name : "显示器调整偏移量",
+                        name : "屏幕调整偏移量",
                         offset : 0xF800D8,
                         size : 4,
                         min : -1000,
@@ -387,7 +387,7 @@
                         ]
                     },
                 ]),
-                new Patcher("bm2dx.dll", "2022-10-25", [
+                new Patcher("bm2dx.dll", "2022-10-25", [   //mirrored from elpis.fun/gamepatcher   thanks@Elpis#0420
                     {
                         name: "冻结菜单/标准模式时间",
                         patches: [{ offset: 0x8B3AF5, off: [0x0F, 0x84], on: [0x90, 0xE9] }],
@@ -545,12 +545,12 @@
                         ]
                     },
                     {
-                        name: "跳过显示器检测(Monitor Check)",
+                        name: "跳过屏幕检测(Monitor Check)",
                         patches: [{ offset: 0x849C4C, off: [0x8C], on: [0x8D] }],
                     },
                     {
                         type : "union",
-                        name : "选择显示器检测回报值",
+                        name : "选择屏幕检测回报值",
                         offset : 0x871BA0,
                         patches : [
                             {
@@ -581,7 +581,7 @@
                     },
                     {
                         type : "number",
-                        name : "显示器调整偏移量",
+                        name : "屏幕调整偏移量",
                         offset : 0xF80CD8,
                         size : 4,
                         min : -1000,
@@ -758,6 +758,242 @@
                             { offset: 0xED8533, off: [0x79, 0x6F, 0x6D, 0x69], on: [0x6F, 0x6D, 0x6E, 0x69] },
                             { offset: 0xF9E109, off: [0x6C, 0x69, 0x73, 0x74], on: [0x6F, 0x6D, 0x6E, 0x69] },
                             { offset: 0x6BB2CF, off: [0xE8, 0x6C, 0x9A, 0x06, 0x00], on: [0xB8, 0x01, 0x00, 0x00, 0x00] },
+                        ]
+                    },
+                ]),
+                new Patcher("bm2dx.dll", "2022-10-31", [   //mirrored from elpis.fun/gamepatcher   thanks@Elpis#0420
+                    {
+                        name: "冻结菜单/标准模式时间",
+                        patches: [{ offset: 0x8C2075, off: [0x0F, 0x84], on: [0x90, 0xE9] }],
+                    },
+                    {
+                        name: "冻结Premium Free模式时间",
+                        patches: [{ offset: 0x74516D, off: [0x75], on: [0xEB] }],
+                    },
+                    {
+                        name: "隐藏分数结算界面PF模式剩余时间",
+                        patches: [{ offset: 0x82D2B5, off: [0x0F, 0x84], on: [0x90, 0xE9] }],
+                    },
+                    {
+                        name: "隐藏曲目列表Banner背景颜色",
+                        patches: [
+                            { offset: 0xED791D, off: [0x5F], on: [0x00] },
+                            { offset: 0xED792D, off: [0x5F], on: [0x00] },
+                        ]
+                    },
+                    {
+                        name: "锁定光标",
+                        patches: [{ offset: 0x7D343A, off: [0x74, 0x40], on: [0x90, 0x90] }],
+                    },
+                    {
+                        name: "解锁全曲",
+                        patches: [{ offset: 0x732DD2, off: [0x32, 0xC0], on: [0xB0, 0x01] }],
+                    },
+                    {
+                        name: "家用风格开始前延迟",
+                        tooltip: "游戏开始前按住Start将暂停歌曲，直到你松开它",
+                        patches: [{ offset: 0x81C11D, off: [0x7C], on: [0xEB] }],
+                    },
+                    {
+                        name: "在LDJ模式下显示TDJ模式独占文件夹",
+                        patches: [{ offset: 0x6CC0E7, off: [0x74, 0x0E], on: [0x90, 0x90] }],
+                    },
+                    {
+                        name: "忽略TDJ(雷霆框)显示器检测错误",
+                        patches: [{ offset: 0x857CC7, off: [0x0F, 0x84], on: [0x90, 0xE9] }],
+                    },
+                    {
+                        name: "启用Lightning模式IO (用于Spicetools)",
+                        patches: [
+                            { offset: 0xC66515, off: [0x74], on: [0xEB] },
+                            { offset: 0xC66791, off: [0xDB, 0x56, 0xFB, 0xFF], on: [0xBB, 0x48, 0xFB, 0xFF] },
+                        ]
+                    },
+                    {
+                        name: "修复Lightning模式下摄像头引发的崩溃 (用于Spicetools) / 在所有模式下强制使用LDJ软件视频解码器",
+                        patches: [{ offset: 0x953D28, off: [0x0F, 0x85, 0x09, 0x01, 0x00, 0x00], on: [0x90, 0x90, 0x90, 0x90, 0x90, 0x90] }],
+                    },
+                    {
+                        name: "强制启用自定义帧率适配模式(实验)",
+                        tooltip: "若下方选项非各模式默认值，请启用此选项",
+                        patches: [
+                            { offset: 0x619E71, off: [0x75], on: [0xEB] },
+                            { offset: 0xBFB989, off: [0x75], on: [0xEB] },
+                        ]
+                    },
+                    {
+                        type : "union",
+                        name : "选择LDJ模式下自定义帧率",
+                        offset : 0xBFB77D,
+                        patches : [
+                            {
+                                name : "60 FPS",
+                                tooltip : "默认",
+                                patch : [0x3C, 0x00],
+                            },
+                            {
+                                name : "120 FPS",
+                                tooltip : "Lightning",
+                                patch : [0x78, 0x00],
+                            },
+                            {
+                                name : "144 FPS",
+                                patch : [0x90, 0x00],
+                            },
+                            {
+                                name : "165 FPS",
+                                patch : [0xA5, 0x00],
+                            },
+                            {
+                                name : "240 FPS",
+                                patch : [0xF0, 0x00],
+                            },
+                            {
+                                name : "360 FPS",
+                                patch : [0x68, 0x01],
+                            },
+                        ]
+                    },
+                    {
+                        type : "union",
+                        name : "选择TDJ模式下自定义帧率",
+                        offset : 0xBFB7A9,
+                        patches : [
+                            {
+                                name : "60 FPS",
+                                patch : [0xC7, 0x44, 0x24, 0x48, 0x3C, 0x00, 0x00, 0x00, 0x8B, 0x44, 0x24, 0x30, 0x89, 0x84, 0x24, 0x0C, 0x01, 0x00, 0x00, 0x48, 0x8B, 0x44, 0x24, 0x44, 0x48, 0x89, 0x84, 0x24, 0x10, 0x01, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x34, 0x04, 0x00, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x4C, 0x01, 0x00, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x50, 0x3C, 0x00, 0x00, 0x00],
+                            },
+                            {
+                                name : "120 FPS",
+                                tooltip : "默认",
+                                patch : [0xC7, 0x44, 0x24, 0x48, 0x78, 0x00, 0x00, 0x00, 0x8B, 0x44, 0x24, 0x30, 0x89, 0x84, 0x24, 0x0C, 0x01, 0x00, 0x00, 0x48, 0x8B, 0x44, 0x24, 0x44, 0x48, 0x89, 0x84, 0x24, 0x10, 0x01, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x34, 0x04, 0x00, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x4C, 0x01, 0x00, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x50, 0x78, 0x00, 0x00, 0x00],
+                            },
+                            {
+                                name : "144 FPS",
+                                patch : [0xC7, 0x44, 0x24, 0x48, 0x90, 0x00, 0x00, 0x00, 0x8B, 0x44, 0x24, 0x30, 0x89, 0x84, 0x24, 0x0C, 0x01, 0x00, 0x00, 0x48, 0x8B, 0x44, 0x24, 0x44, 0x48, 0x89, 0x84, 0x24, 0x10, 0x01, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x34, 0x04, 0x00, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x4C, 0x01, 0x00, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x50, 0x90, 0x00, 0x00, 0x00],
+                            },
+                            {
+                                name : "165 FPS",
+                                patch : [0xC7, 0x44, 0x24, 0x48, 0xA5, 0x00, 0x00, 0x00, 0x8B, 0x44, 0x24, 0x30, 0x89, 0x84, 0x24, 0x0C, 0x01, 0x00, 0x00, 0x48, 0x8B, 0x44, 0x24, 0x44, 0x48, 0x89, 0x84, 0x24, 0x10, 0x01, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x34, 0x04, 0x00, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x4C, 0x01, 0x00, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x50, 0xA5, 0x00, 0x00, 0x00],
+                            },
+                            {
+                                name : "240 FPS",
+                                patch : [0xC7, 0x44, 0x24, 0x48, 0xF0, 0x00, 0x00, 0x00, 0x8B, 0x44, 0x24, 0x30, 0x89, 0x84, 0x24, 0x0C, 0x01, 0x00, 0x00, 0x48, 0x8B, 0x44, 0x24, 0x44, 0x48, 0x89, 0x84, 0x24, 0x10, 0x01, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x34, 0x04, 0x00, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x4C, 0x01, 0x00, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x50, 0xF0, 0x00, 0x00, 0x00],
+                            },
+                            {
+                                name : "360 FPS",
+                                patch : [0xC7, 0x44, 0x24, 0x48, 0x68, 0x01, 0x00, 0x00, 0x8B, 0x44, 0x24, 0x30, 0x89, 0x84, 0x24, 0x0C, 0x01, 0x00, 0x00, 0x48, 0x8B, 0x44, 0x24, 0x44, 0x48, 0x89, 0x84, 0x24, 0x10, 0x01, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x34, 0x04, 0x00, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x4C, 0x01, 0x00, 0x00, 0x00, 0xC7, 0x44, 0x24, 0x50, 0x68, 0x01, 0x00, 0x00],
+                            },
+                        ]
+                    },
+                    {
+                        type : "union",
+                        name : "选择全屏模式下屏幕帧率检测(Monitor Check)目标值",
+                        offset : 0x8649D7,
+                        patches : [
+                            {
+                                name : "60 FPS",
+                                tooltip : "若上两个选项值>120，请选择对应的相同帧率，否则请保持此项默认",
+                                patch : [0x3C, 0x00],
+                            },
+                            {
+                                name : "120 FPS",
+                                patch : [0x78, 0x00],
+                            },
+                            {
+                                name : "144 FPS",
+                                patch : [0x90, 0x00],
+                            },
+                            {
+                                name : "165 FPS",
+                                patch : [0xA5, 0x00],
+                            },
+                            {
+                                name : "240 FPS",
+                                patch : [0xF0, 0x00],
+                            },
+                            {
+                                name : "360 FPS",
+                                patch : [0x68, 0x01],
+                            },
+                        ]
+                    },
+                    {
+                        name: "跳过屏幕检测(Monitor Check)",
+                        patches: [{ offset: 0x857C8C, off: [0x8C], on: [0x8D] }],
+                    },
+                    {
+                        type : "union",
+                        name : "选择屏幕检测回报值",
+                        offset : 0x87FD20,
+                        patches : [
+                            {
+                                name : "默认",
+                                patch : [0x89, 0x54, 0x24, 0x10, 0x48, 0x89, 0x4C, 0x24, 0x08, 0x48, 0x83, 0xEC, 0x28, 0x48, 0x8B, 0x44, 0x24, 0x30, 0x8B, 0x80, 0x48, 0x0B, 0x00, 0x00, 0x05, 0x67, 0x01],
+                            },
+                            {
+                                name : "120.0000 FPS",
+                                patch : [0x48, 0xB8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5E, 0x40, 0x66, 0x48, 0x0F, 0x6E, 0xC0, 0xF2, 0x0F, 0x58, 0xC8, 0xC3, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC],
+                            },
+                            {
+                                name : "144.0000 FPS",
+                                patch : [0x48, 0xB8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x62, 0x40, 0x66, 0x48, 0x0F, 0x6E, 0xC0, 0xF2, 0x0F, 0x58, 0xC8, 0xC3, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC],
+                            },
+                            {
+                                name : "165.0000 FPS",
+                                patch : [0x48, 0xB8, 0x00, 0x00, 0x00, 0x00, 0x00, 0xA0, 0x64, 0x40, 0x66, 0x48, 0x0F, 0x6E, 0xC0, 0xF2, 0x0F, 0x58, 0xC8, 0xC3, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC],
+                            },
+                            {
+                                name : "240.0000 FPS",
+                                patch : [0x48, 0xB8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x6E, 0x40, 0x66, 0x48, 0x0F, 0x6E, 0xC0, 0xF2, 0x0F, 0x58, 0xC8, 0xC3, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC],
+                            },
+                            {
+                                name : "360.0000 FPS",
+                                patch : [0x48, 0xB8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x76, 0x40, 0x66, 0x48, 0x0F, 0x6E, 0xC0, 0xF2, 0x0F, 0x58, 0xC8, 0xC3, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC],
+                            },
+                        ]
+                    },
+                    {
+                        type : "number",
+                        name : "屏幕调整偏移量",
+                        offset : 0xF96E18,
+                        size : 4,
+                        min : -1000,
+                        max : 1000,
+                    },
+                    {
+                        name: "跳过摄像头错误界面",
+                        patches: [{ offset: 0x871309, off: [0x84], on: [0x81] }],
+                    },
+                    {
+                        name: "强制无限V-Disc",
+                        tooltip: "只适用于PF模式下无限重开LEGGENDARIA难度，需要关闭FREE PLAY",
+                        patches: [{ offset: 0x3A5A53, off: [0x0F, 0x84], on: [0x90, 0xE9] }],
+                    },
+                    {
+                        name: "启用1P的Premium Free模式",
+                        patches: [{ offset: 0x7CBB0C, off: [0x75], on: [0xEB] }],
+                    },
+                    {
+                        name: "启用2P的Premium Free模式",
+                        patches: [
+                            { offset: 0x7CC054, off: [0x74, 0x30], on: [0x90, 0x90] },
+                            { offset: 0x7CC07A, off: [0x74, 0x0A], on: [0x90, 0x90] },
+                        ]
+                    },
+                    {
+                        name: "启用共享模式WASAPI(44100Hz)",
+                        patches: [{ offset: 0x236B81, off: [0x01], on: [0x00] }],
+                    },
+                    {
+                        name: "修复SSE4.2指令集",
+                        patches: [{ offset: 0x236A94, off: [0xF3, 0x45, 0x0F], on: [0x90, 0x90, 0x90] }],
+                    },
+                    {
+                        name: "快速重开",
+                        patches: [
+                            { offset: 0x6D2051, off: [0x00], on: [0x01] },
+                            { offset: 0x6D2060, off: [0x74], on: [0xEB] },
                         ]
                     },
                 ]),
