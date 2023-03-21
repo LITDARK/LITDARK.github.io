@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8">
+        <title>CHUNITHM SUN Modder</title>
+        <link rel="stylesheet" href="../css/style.css">
+        <link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+        <link href="../../assets/images/favicon.png" rel="shortcut icon" type="image/png">
+        <!-- don't hate -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script type="text/javascript" src="../js/FileSaver.min.js"></script>
+        <script type="text/javascript" src="../js/dllpatcher-cn.js"></script>
+        <script type="text/javascript">
+            window.addEventListener("load", function () {
+                new Patcher("chusanApp.exe", "", [   //mirrored from patcher.turksigara.net  (C)2023 TürkSigara Entertainment
+                    {
+                        name: "关闭夜间闭店设置",
+                        tooltip: "关闭凌晨12点至次日早8点的强制闭店，但无法跳过日本时间早6:30至7点的维护时间",
+                        patches: [
+                            {offset: 0xBAB8F3, off: [0x74], on: [0xEB]},
+                        ],
+                    },
+                    {
+                        name: "启用共享音频，音频采样率必须为48000Hz",
+                        tooltip: "改善兼容性但可能增加延迟",
+                        patches: [
+                            {offset: 0xEC8F7A, off: [0x01], on: [0x00]},
+                        ],
+                    },
+                    {
+                        name: "强制使用双声道输出",
+                        patches: [
+                            {offset: 0xEC9051, off: [0x75, 0x3F], on: [0x90, 0x90]},
+                        ],
+                    },
+                    {
+                        name: "关闭选歌倒计时",
+                        patches: [
+                            {offset: 0x9ADF1B, off: [0x74], on: [0xEB]},
+                        ],
+                    },
+                    {
+                        name: "设置所有倒计时为999",
+                        patches: [
+                            {offset: 0x8393D0, off: [0x8B, 0x44, 0x24, 0x04, 0x69, 0xC0, 0xE8, 0x03, 0x00, 0x00], on: [0xB8, 0x58, 0x3E, 0x0F, 0x00, 0x90, 0x90, 0x90, 0x90, 0x90]},
+                        ],
+                    },
+                    {
+                        name: "修复点对点游玩",
+                        tooltip: "修复点对点游玩时的无限同步",
+                        patches: [
+                            {offset: 0x6218F3, off: [0x01], on: [0x00]},
+                        ]
+                    },
+                    {
+                        name: "Title Server不加密(No Encryption)",
+                        tooltip: "用于过网络自检",
+                        patches: [
+                            {offset: 0x1D55C40, off: [0xD2], on: [0x00]},
+                            {offset: 0x1D55C44, off: [0xD2], on: [0x00]},
+                        ]
+                    },
+                    {
+                        name: "忽略来自AMdaemon的某些错误",
+                        tooltip: "可能可以修复如6401之类的错误，但也可能会导致其他问题",
+                        patches: [
+                            {offset: 0x37D4AB, off: [0x75], on: [0xEB]},
+                        ],
+                    },
+                    {
+                        name: "CVT筐体模式",
+                        tooltip: "选择此项以使用60帧模式游玩",
+                        patches: [
+                            {offset: 0x1CD04, off: [0x01], on: [0x00]},
+                            {offset: 0x1CD3B, off: [0x01], on: [0x00]},
+                            {offset: 0x37B07B, off: [0x75], on: [0xEB]},
+                            {offset: 0x37CBBE, off: [0x84, 0xC0, 0x0F, 0x94, 0xC1], on: [0x90, 0x90, 0x90, 0x90, 0x90]},
+                            {offset: 0xEAC007, off: [0x80], on: [0x00]},
+                        ],
+                    },
+                    {
+                        name: "禁用1080P分辨率检测",
+                        patches: [
+                            {offset: 0x1CCBF, off: [0x81, 0xBC, 0x24, 0xB8, 0x02, 0x00, 0x00, 0x80, 0x07, 0x00, 0x00, 0x75, 0x1F, 0x81, 0xBC, 0x24, 0xBC, 0x02, 0x00, 0x00, 0x38, 0x04, 0x00, 0x00, 0x75, 0x12], on: [0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90]},
+                        ],
+                    },
+                    {
+                        name: "强制通过120帧检测",
+                        tooltip: "选择此项以强制通过自检时的帧率检测，不要与CVT筐体模式同时使用！",
+                        patches: [
+                            {offset: 0x1CCB1, off: [0x85, 0xC0], on: [0xEB, 0x30]},
+                        ],
+                    },
+                ]);
+                new Patcher("amdaemon.exe", "", [
+                    {
+                        name: "强制“修复”6401错误",
+                        tooltip: "将6401错误实例变更为0",
+                        patches: [
+                            {offset: 0x2220F6, off: [0x01, 0x19], on: [0x00, 0x00]},
+                            {offset: 0x22229E, off: [0x01, 0x19], on: [0x00, 0x00]},
+                            {offset: 0x222C87, off: [0x01, 0x19], on: [0x00, 0x00]},
+                        ],
+                    },
+                ]);
+            });
+        </script>
+    </head>
+    <body>
+        <h1>CHUNITHM SUN Modder</h1>
+    </body>
+</html>
