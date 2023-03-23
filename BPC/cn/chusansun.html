@@ -85,6 +85,14 @@
                         ],
                     },
                     {
+                        name: "绕过LED基板检测",
+                        tooltip: "强制通过LED基板检测并自动继续自检流程",
+                        patches: [
+                            {offset: 0x98004A, off: [0x01], on: [0x00]},
+                            {offset: 0x98004F, off: [0x00], on: [0x01]},
+                        ]
+                    },
+                    {
                         name: "强制通过120帧检测",
                         tooltip: "选择此项以强制通过自检时的帧率检测，不要与CVT筐体模式同时使用！",
                         patches: [

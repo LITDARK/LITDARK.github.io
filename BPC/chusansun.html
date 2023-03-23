@@ -85,6 +85,14 @@
                         ],
                     },
                     {
+                        name: "Bypass LED board check",
+                        tooltip: "Forces LED board check to good and auto continues",
+                        patches: [
+                            {offset: 0x98004A, off: [0x01], on: [0x00]},
+                            {offset: 0x98004F, off: [0x00], on: [0x01]},
+                        ]
+                    },
+                    {
                         name: "Force 120hz check",
                         tooltip: "Check to make the 120hz check pass always (don't use this with the CVT Mode patch)",
                         patches: [
