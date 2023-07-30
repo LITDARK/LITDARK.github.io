@@ -314,7 +314,7 @@ function new_websocket() {
     if (location.hostname == "") {
 	socket = new WebSocket("ws://192.168.2.176:9002");
     } else {
-	socket = new WebSocket(`ws://${location.hostname}:9002`);
+	socket = new WebSocket("ws://192.168.2.176:9002");
     }
 
     socket.binaryType = "arraybuffer";
