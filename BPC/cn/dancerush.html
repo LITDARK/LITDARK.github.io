@@ -49,6 +49,86 @@
                         ]
                     },
                 ]),
+                new Patcher("superstep.dll", "2020-12-14", [   //mirrored for mon.im/bemanipatcher   thanks@drmext
+                    {
+                        name: "冻结时间",
+                        patches: [{ offset: 0x3565AA, off: [0x89, 0x43, 0x0C], on: [0x90, 0x90, 0x90] }],
+                    },
+                    {
+                        name: "解锁全曲",
+                        patches: [
+                            { offset: 0x785AD8, off: [0x74], on: [0xEB] },
+                            { offset: 0x785B08, off: [0x00], on: [0x01] },
+                            { offset: 0x787219, off: [0x75, 0x07], on: [0x90, 0x90] },
+                            { offset: 0x78721E, off: [0x00], on: [0x03] },
+                            { offset: 0x892B55, off: [0x66], on: [0x62] },
+                        ]
+                    },
+                    {
+                        name: "隐藏所有底部文字",
+                        patches: [
+                            { offset: 0x74B733, off: [0x0F, 0x84], on: [0x90, 0xE9] },
+                            { offset: 0x74B9BB, off: [0x74, 0x4F], on: [0x90, 0x90] },
+                            { offset: 0x74B9C0, off: [0x0F, 0x84], on: [0x90, 0xE9] },
+                        ]
+                    },
+                    {
+                        type : "union",
+                        name : "重定向'All Factory Settings'菜单界面为",
+                        tooltip : "AfpViewer界面无法使用按键控制",
+                        offset : 0xA2C138,
+                        patches : [
+                            {
+                                name : "默认",
+                                patch : [0x70, 0xD8, 0x39, 0x80, 0x01],
+                            },
+                            {
+                                name : "QCTestMenuScene",
+                                patch : [0x30, 0xD9, 0x39, 0x80, 0x01],
+                            },
+                            {
+                                name : "AfpViewerScene",
+                                patch : [0x30, 0xAC, 0x39, 0x80, 0x01],
+                            },
+                        ]
+                    },
+                    {
+                        type : "union",
+                        name : "重定向'QCTestMenuScene'菜单界面为",
+                        tooltip : "若更改此选项，上一个选项必须设置为'QCTestMenuScene'",
+                        offset : 0x39CD50,
+                        patches : [
+                            {
+                                name : "默认",
+                                patch : [0xEC, 0x93, 0x3F, 0x00],
+                            },
+                            {
+                                name : "KoteraTestScene",
+                                patch : [0xBC, 0xD5, 0x3D, 0x00],
+                            },
+                            {
+                                name : "GamePrototypeSelectScene",
+                                patch : [0xDC, 0xBB, 0x3C, 0x00],
+                            },
+                        ]
+                    },
+                ]),
+                new Patcher("superstep.dll", "2022-12-14", [   //mirrored from patcher.turksigara.net  (C)2023 TürkSigara Entertainment
+                    {
+                        name: "冻结时间",
+                        patches: [{ offset: 0x359FEA, off: [0x89, 0x43, 0x0C], on: [0x90, 0x90, 0x90] }],
+                    },
+                    {
+                        name: "解锁全曲",
+                        patches: [
+                            { offset: 0x78A9A8, off: [0x74], on: [0xEB] },
+                            { offset: 0x78A9D8, off: [0x00], on: [0x01] },
+                            { offset: 0x78C0E9, off: [0x75, 0x07], on: [0x90, 0x90] },
+                            { offset: 0x78C0EE, off: [0x00], on: [0x03] },
+                            { offset: 0x8986A5, off: [0x66], on: [0x62] },
+                        ]
+                    },
+                ]),
             ]);
         });
     </script>
