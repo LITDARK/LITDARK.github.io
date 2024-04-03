@@ -1,0 +1,7 @@
+body {
+    background-image: url(../img/iidx/resident.png);
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-attachment: fixed;
+    background-size: cover;
+}

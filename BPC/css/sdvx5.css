@@ -1,0 +1,12 @@
+body {
+    background-image: url(../img/sdvx/5.png);
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+h1 {
+    color: #000000;
+    text-align: center;
+}
