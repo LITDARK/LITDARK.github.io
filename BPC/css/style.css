@@ -85,7 +85,7 @@
 }
 
 .patchContainer {
-    background-color: #21262D;
+    background:rgba(33, 38, 45, 0.85);
     color: #FFFFFF;
     padding: 20px;
     max-width: 650px;

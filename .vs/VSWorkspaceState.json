@@ -2,8 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\BPC",
-    "\\BPC\\cn"
+    "\\BPC\\cn",
+    "\\BPC\\img",
+    "\\BPC\\img\\chu"
   ],
-  "SelectedNode": "\\BPC\\resident.html",
+  "SelectedNode": "\\BPC\\index.html",
   "PreviewInSolutionExplorer": false
 }

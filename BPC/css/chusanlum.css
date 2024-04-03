@@ -1,0 +1,7 @@
+body {
+    background-image: url(../img/chu/lum.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: contain;
+}
